@@ -257,6 +257,40 @@ func TestClaimedSourceRejectsWrongCollectorKind(t *testing.T) {
 	}
 }
 
+// TestClaimedSourceRejectsEmptySourceSystem proves the claim boundary fails
+// fast: a claim with no source system can never satisfy the SDK
+// source-system equality rule downstream, so collection refuses it here
+// instead of emitting facts the host must reject.
+func TestClaimedSourceRejectsEmptySourceSystem(t *testing.T) {
+	t.Parallel()
+
+	source, err := NewClaimedSource(SourceConfig{
+		CollectorInstanceID: "sbom-attestation-test",
+		Targets: []TargetConfig{{
+			ScopeID:        "sbom://configured/example",
+			SourceType:     SourceTypeConfigured,
+			ArtifactKind:   ArtifactKindSBOM,
+			DocumentFormat: DocumentFormatCycloneDX,
+			DocumentURL:    "https://sbom.example.com/sbom.json",
+		}},
+		Provider: &recordingProvider{doc: Document{Body: []byte(`{}`)}},
+		Now:      fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("NewClaimedSource() error = %v", err)
+	}
+
+	claim := testClaim(CollectorKind, "sbom-attestation-test", "sbom://configured/example", "sbom-attestation:gen-1", 7)
+	claim.SourceSystem = ""
+	_, ok, err := source.NextClaimed(context.Background(), claim)
+	if err == nil {
+		t.Fatal("NextClaimed() error = nil, want source-system rejection")
+	}
+	if ok {
+		t.Fatal("NextClaimed() ok = true, want false")
+	}
+}
+
 // TestClaimedSourceRefusesCredentialBearingRecordID proves the extraction
 // boundary closes the credential-record channel the in-tree parity pin holds
 // open: a record ID that carries userinfo fails closed instead of shipping

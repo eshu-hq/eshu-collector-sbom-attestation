@@ -96,7 +96,13 @@ func (s *ClaimedSource) NextClaimed(
 			claim.CollectorKind,
 		)
 	}
-	if strings.TrimSpace(claim.SourceSystem) != "" && claim.SourceSystem != CollectorKind {
+	// The SDK requires every fact's source system to equal the claim's, so
+	// a claim with no source system can never produce host-acceptable
+	// facts: fail fast here instead of emitting work the host must reject.
+	if strings.TrimSpace(claim.SourceSystem) == "" {
+		return CollectedSnapshot{}, false, fmt.Errorf("SBOM attestation claim source_system is required")
+	}
+	if claim.SourceSystem != CollectorKind {
 		return CollectedSnapshot{}, false, fmt.Errorf(
 			"SBOM attestation claim source_system %q must be %q",
 			claim.SourceSystem,
