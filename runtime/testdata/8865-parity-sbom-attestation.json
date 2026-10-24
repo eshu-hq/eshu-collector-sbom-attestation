@@ -1,0 +1,878 @@
+{
+  "scopes": [
+    {
+      "scope_id": "sbom-attestation://parity/cyclonedx-configured",
+      "generation_id": "sbom-attestation:parity-gen-8865-1",
+      "envelopes": [
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "0ef692a0a9e87228b7705ea3bbe532955f9a8838e1374b603509d5ef86456df2",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3",
+          "payload": {
+            "bom_ref": "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "component_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3",
+            "correlation_anchors": [
+              "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "group": "",
+            "hashes": [
+              {
+                "algorithm": "SHA-256",
+                "value": "1111111111111111111111111111111111111111111111111111111111111111"
+              }
+            ],
+            "is_duplicate": false,
+            "licenses": [],
+            "name": "registry.example.com/library/example",
+            "package_id": "",
+            "publisher": "",
+            "purl": "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "scope": "",
+            "supplier_name": "",
+            "supplier_url": "",
+            "type": "container",
+            "version": "1.2.3"
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "25c75e65ba0706c6801255a1af9715095089fdae71ec196c09756122931c3fbd",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2-\u003eca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "from_component_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2",
+            "relationship_origin": "cyclonedx.dependency",
+            "relationship_type": "DEPENDS_ON",
+            "to_component_id": "ca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "2f271b2bf26881a14d0f9776b20837c11adefb2e5900e64ec5ef5bd4ae7d40f2",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2",
+          "payload": {
+            "bom_ref": "pkg:npm/lodash@4.17.21",
+            "component_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2",
+            "correlation_anchors": [
+              "pkg:npm/lodash@4.17.21"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "group": "",
+            "hashes": [
+              {
+                "algorithm": "SHA-256",
+                "value": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+              }
+            ],
+            "is_duplicate": false,
+            "licenses": [
+              {
+                "id": "MIT"
+              }
+            ],
+            "name": "lodash",
+            "package_id": "npm://registry.npmjs.org/lodash",
+            "publisher": "OpenJS Foundation",
+            "purl": "pkg:npm/lodash@4.17.21",
+            "scope": "",
+            "supplier_name": "OpenJS Foundation",
+            "supplier_url": "https://openjsf.org/",
+            "type": "library",
+            "version": "4.17.21"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "30e319ab789808d0a913d402dfc8e9aa2348b6a2818ebb87737caf01da5570a6",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "e4c816742334822bcf0d96b58a21dc2aa3e819085e24c7d3b0e827eef975afd9",
+          "payload": {
+            "bom_ref": "pkg:npm/lodash@4.17.21#dup",
+            "component_id": "e4c816742334822bcf0d96b58a21dc2aa3e819085e24c7d3b0e827eef975afd9",
+            "correlation_anchors": [
+              "pkg:npm/lodash@4.17.21",
+              "pkg:npm/lodash@4.17.21#dup"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "group": "",
+            "hashes": [],
+            "is_duplicate": true,
+            "licenses": [
+              {
+                "expression": "MIT"
+              }
+            ],
+            "name": "lodash",
+            "package_id": "npm://registry.npmjs.org/lodash",
+            "publisher": "",
+            "purl": "pkg:npm/lodash@4.17.21",
+            "scope": "",
+            "supplier_name": "",
+            "supplier_url": "",
+            "type": "library",
+            "version": "4.17.21"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "3c264f032490b47dbd7e384f7aba1d571fc4ef6ec96debeae3246ff2ae3a8844",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "ca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2",
+          "payload": {
+            "bom_ref": "pkg:pypi/requests@2.31.0",
+            "component_id": "ca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2",
+            "correlation_anchors": [
+              "pkg:pypi/requests@2.31.0"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "group": "",
+            "hashes": [
+              {
+                "algorithm": "SHA-512",
+                "value": "abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123ab"
+              }
+            ],
+            "is_duplicate": false,
+            "licenses": [
+              {
+                "name": "Apache License 2.0"
+              }
+            ],
+            "name": "requests",
+            "package_id": "pypi://pypi.org/simple/requests",
+            "publisher": "",
+            "purl": "pkg:pypi/requests@2.31.0",
+            "scope": "",
+            "supplier_name": "",
+            "supplier_url": "",
+            "type": "library",
+            "version": "2.31.0"
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "7504cc2fdd86003bf1c041279d3047e1b0649fdaf3825349126f800932f44df3",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3-\u003eca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "from_component_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3",
+            "relationship_origin": "cyclonedx.dependency",
+            "relationship_type": "DEPENDS_ON",
+            "to_component_id": "ca56e4c9b525b82d5023e91f3a114eda9a9c1df48f3e69aa8b2e8981304264e2"
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "a3b3f9653e28e9c6882aac906072f1eaa4d50c342790cb1f30c371f888f4c214",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640:component:pkg:npm/lodash@4.17.21#dup:duplicate",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "reason": "duplicate_component_identity",
+            "summary": "cyclonedx component \"pkg:npm/lodash@4.17.21#dup\" duplicates identity already seen as \"pkg:npm/lodash@4.17.21\""
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "ba9b90b1fac6b6f38bd96237943bfc1b91787c8ce730b88c839191b2582b4fb6",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "56b0d2167b7cfd12818e28729fb37051de76c81325addd93ccae8e1d7bf12871",
+          "payload": {
+            "bom_ref": "",
+            "component_id": "56b0d2167b7cfd12818e28729fb37051de76c81325addd93ccae8e1d7bf12871",
+            "correlation_anchors": [
+              "cpe:2.3:o:alpine:alpine_linux:3.19:*:*:*:*:*:*:*"
+            ],
+            "cpe": "cpe:2.3:o:alpine:alpine_linux:3.19:*:*:*:*:*:*:*",
+            "description": "",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "group": "",
+            "hashes": [],
+            "is_duplicate": false,
+            "licenses": [],
+            "name": "alpine",
+            "package_id": "",
+            "publisher": "",
+            "purl": "",
+            "scope": "",
+            "supplier_name": "",
+            "supplier_url": "",
+            "type": "operating-system",
+            "version": "3.19"
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "cdd6c23cc79794dc3e860bfc6500a526017b49739228dfb90b1f0428d5094021",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3-\u003e0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "from_component_id": "f53bffea4cdcb6a261a22b9bcf4aa9da2b413d85d9197f7f4ea79f63060e39d3",
+            "relationship_origin": "cyclonedx.dependency",
+            "relationship_type": "DEPENDS_ON",
+            "to_component_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2"
+          }
+        },
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "d96be6445da74eccb12e656944cfcaefb3941a7361f55c306dbc8b0f2dd313f3",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2:vcs:https://github.com/lodash/lodash",
+          "payload": {
+            "component_id": "0bbb7d892a90c23f3c6dc4ec7841b7a453b71b2ab8d7007130b9dd09f2d9f6f2",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "reference_locator": "",
+            "reference_type": "vcs",
+            "reference_url": "https://github.com/lodash/lodash"
+          }
+        },
+        {
+          "fact_kind": "sbom.document",
+          "stable_key": "e89ab30c42bc6c4b20500794f5954911cf3492b2ed406558dc4fd84de0d82275",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "parity-demo-cyclonedx",
+          "payload": {
+            "component_count": 5,
+            "correlation_anchors": [
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "sha256:6f3195d492789e5d0f1804250a8303251c271df557035d80c5081a1dd0d66915",
+              "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79"
+            ],
+            "created_at": "2026-05-15T12:00:00Z",
+            "created_by_tool": "syft 1.20.0",
+            "dependency_count": 3,
+            "document_digest": "sha256:6f3195d492789e5d0f1804250a8303251c271df557035d80c5081a1dd0d66915",
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "document_name": "registry.example.com/library/example",
+            "format": "cyclonedx",
+            "parse_status": "parsed",
+            "serial_number": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+            "source_format": "json",
+            "spec_version": "1.5",
+            "subject_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "subject_digests": [
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            ],
+            "verification_policy": "",
+            "verification_status": "",
+            "warning_count": 3
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "ebbcf57f91d59b6a5929b2d5f672469999ac7580e8b77899846faebf5826161e",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640:component:missing-purl-ref",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "reason": "component_missing_identity",
+            "summary": "cyclonedx component lacks both purl and name"
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "f271d82c53ae9cb7b329061e7a650a800c074555c6fed34c70dd3497c511c0c7",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/demo-cyclonedx.json",
+          "source_record_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640:unsupported:vulnerabilities",
+          "payload": {
+            "document_id": "82c35a9f38e16dfe42104a17dfa0bd93bb9d1b601bd5dff98956ff787fcc3640",
+            "reason": "unsupported_field",
+            "summary": "cyclonedx vulnerabilities section ignored (1 entries); use advisory collectors"
+          }
+        }
+      ]
+    },
+    {
+      "scope_id": "sbom-attestation://parity/spdx-referrer",
+      "generation_id": "sbom-attestation:parity-gen-8865-2",
+      "envelopes": [
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "38635a656406a0bd1ed0c31f535c4ee005519847749c4ec18212992391b2939e",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923:purl:pkg:npm/lodash@4.17.21",
+          "payload": {
+            "component_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reference_locator": "pkg:npm/lodash@4.17.21",
+            "reference_type": "purl",
+            "reference_url": ""
+          }
+        },
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "38759e1a12dbec7c17aa58d1963b9078d4d9ddf28f68daea34a152734728a768",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "0bb4183efc5d7f6fa56c221b04feb73badad8f3ccfc0e3113fdd788af8ee9973:purl:pkg:npm/lodash@4.17.21",
+          "payload": {
+            "component_id": "0bb4183efc5d7f6fa56c221b04feb73badad8f3ccfc0e3113fdd788af8ee9973",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reference_locator": "pkg:npm/lodash@4.17.21",
+            "reference_type": "purl",
+            "reference_url": ""
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "4f849a7b64cd6f824ea67868af11ea1c62f3e2b0c78310b0e908d2c683ac1130",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+          "payload": {
+            "component_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+            "copyright": "",
+            "correlation_anchors": [
+              "SPDXRef-Package-requests",
+              "cpe:2.3:a:python-requests:requests:2.31.0:*:*:*:*:*:*:*",
+              "pkg:pypi/requests@2.31.0"
+            ],
+            "cpe": "cpe:2.3:a:python-requests:requests:2.31.0:*:*:*:*:*:*:*",
+            "description": "",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "download_location": "",
+            "hashes": [],
+            "homepage": "",
+            "is_duplicate": false,
+            "licenses": [
+              {
+                "expression": "Apache-2.0"
+              }
+            ],
+            "name": "requests",
+            "package_id": "pypi://pypi.org/simple/requests",
+            "publisher": "",
+            "purl": "pkg:pypi/requests@2.31.0",
+            "spdx_id": "SPDXRef-Package-requests",
+            "supplier_kind": "",
+            "supplier_name": "",
+            "type": "library",
+            "version": "2.31.0"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "588d38287f545be71a2bd7d65a427b7b50a80fc3eb6326f1eb385415830a1599",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923",
+          "payload": {
+            "component_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923",
+            "copyright": "",
+            "correlation_anchors": [
+              "SPDXRef-Package-lodash",
+              "pkg:npm/lodash@4.17.21"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "download_location": "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz",
+            "hashes": [
+              {
+                "algorithm": "SHA256",
+                "value": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+              }
+            ],
+            "homepage": "",
+            "is_duplicate": false,
+            "licenses": [
+              {
+                "expression": "MIT"
+              },
+              {
+                "expression": "MIT"
+              }
+            ],
+            "name": "lodash",
+            "package_id": "npm://registry.npmjs.org/lodash",
+            "publisher": "",
+            "purl": "pkg:npm/lodash@4.17.21",
+            "spdx_id": "SPDXRef-Package-lodash",
+            "supplier_kind": "organization",
+            "supplier_name": "OpenJS Foundation",
+            "type": "library",
+            "version": "4.17.21"
+          }
+        },
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "7bae3c672aef86600b9d53620e565e07e8b017ea0ae3219aaadcbfc1e2319e7b",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6:cpe23Type:cpe:2.3:a:python-requests:requests:2.31.0:*:*:*:*:*:*:*",
+          "payload": {
+            "component_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reference_locator": "cpe:2.3:a:python-requests:requests:2.31.0:*:*:*:*:*:*:*",
+            "reference_type": "cpe23Type",
+            "reference_url": ""
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "83a9a7a45e97ca329022ebe99abf2e4e4b7d9a52ee719979ac3aaf019e846ab8",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872-\u003e6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923",
+          "payload": {
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "from_component_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872",
+            "relationship_origin": "spdx.relationship",
+            "relationship_type": "CONTAINS",
+            "to_component_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "acfea39175ffedfff2a36cbff4e1988fcc3e1e00bd7ef45df32124dea21bed32",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "0bb4183efc5d7f6fa56c221b04feb73badad8f3ccfc0e3113fdd788af8ee9973",
+          "payload": {
+            "component_id": "0bb4183efc5d7f6fa56c221b04feb73badad8f3ccfc0e3113fdd788af8ee9973",
+            "copyright": "",
+            "correlation_anchors": [
+              "SPDXRef-Package-lodash-dup",
+              "pkg:npm/lodash@4.17.21"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "download_location": "",
+            "hashes": [],
+            "homepage": "",
+            "is_duplicate": true,
+            "licenses": [
+              {
+                "expression": "MIT"
+              }
+            ],
+            "name": "lodash",
+            "package_id": "npm://registry.npmjs.org/lodash",
+            "publisher": "",
+            "purl": "pkg:npm/lodash@4.17.21",
+            "spdx_id": "SPDXRef-Package-lodash-dup",
+            "supplier_kind": "",
+            "supplier_name": "",
+            "type": "library",
+            "version": "4.17.21"
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "b31e4226ca52f5ee1fd7ccfbef02bc90e006ee0d27eb198dff05c69cc2318bce",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872-\u003e4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+          "payload": {
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "from_component_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872",
+            "relationship_origin": "spdx.relationship",
+            "relationship_type": "CONTAINS",
+            "to_component_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6"
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "ba3603f0a4985e0b93c5be633a7bd52b169c388ad30768bb1fed288dbdb7de98",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c:package:SPDXRef-Package-noident",
+          "payload": {
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reason": "component_missing_identity",
+            "summary": "spdx package lacks both PURL external ref and name"
+          }
+        },
+        {
+          "fact_kind": "sbom.dependency_relationship",
+          "stable_key": "bff18a458b2afcb7a6dfe68288ad39c9cf6b3d1ab6de42c8b7d8feaf1f4e8407",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923-\u003e4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+          "payload": {
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "from_component_id": "6c40380676cb7e019b839c074bdb446e65d92499825e71cab51e77a8d8508923",
+            "relationship_origin": "spdx.relationship",
+            "relationship_type": "DEPENDS_ON",
+            "to_component_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6"
+          }
+        },
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "c8404362bfd32fa876de5fc79c87d227a2890595d9065614eb523f4642653969",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872:purl:pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "payload": {
+            "component_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reference_locator": "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reference_type": "purl",
+            "reference_url": ""
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "c8cc653751f35eba969d8ef68ec74bec37c050740a19bec1420b370f3332acb0",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c:package:SPDXRef-Package-lodash-dup:duplicate",
+          "payload": {
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reason": "duplicate_component_identity",
+            "summary": "spdx package \"SPDXRef-Package-lodash-dup\" duplicates identity already seen as \"SPDXRef-Package-lodash\""
+          }
+        },
+        {
+          "fact_kind": "sbom.document",
+          "stable_key": "cb1a3d6dd4fe56fdb8fc6beab205da1d0b3bb1f9de00fe983cf4ed230acd285c",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "payload": {
+            "component_count": 5,
+            "correlation_anchors": [
+              "https://example.com/spdx/example-1.2.3-7d83",
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "sha256:27d3234a4f2bac9053e990ed3dbca958c60669e5d7b06a1a8446f7a98ffb6bb3"
+            ],
+            "created_at": "2026-05-15T12:00:00Z",
+            "created_by_tool": "syft-1.20.0",
+            "dependency_count": 3,
+            "document_digest": "sha256:27d3234a4f2bac9053e990ed3dbca958c60669e5d7b06a1a8446f7a98ffb6bb3",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "document_name": "registry.example.com/library/example-1.2.3",
+            "document_namespace": "https://example.com/spdx/example-1.2.3-7d83",
+            "format": "spdx",
+            "parse_status": "parsed",
+            "source_format": "json",
+            "spec_version": "SPDX-2.3",
+            "subject_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "subject_digests": [
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            ],
+            "verification_policy": "",
+            "verification_status": "",
+            "warning_count": 2
+          }
+        },
+        {
+          "fact_kind": "sbom.external_reference",
+          "stable_key": "d3323805718ce80610cb9adb11f106d0e50f258e28a5193605caf00f4e1f8e30",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6:purl:pkg:pypi/requests@2.31.0",
+          "payload": {
+            "component_id": "4720147bf87b8dc52f7d3577b9003d75ebb832c564de41856c0542ac12853ad6",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "reference_locator": "pkg:pypi/requests@2.31.0",
+            "reference_type": "purl",
+            "reference_url": ""
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "f1c5672eb1d77f6e74b56f539dac124bf23b460620c762dacca225d356be7d62",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "63aba08a2c8649979596e792c972a4b59f59201b236690e9a26e5bd7825ec5ca",
+          "payload": {
+            "component_id": "63aba08a2c8649979596e792c972a4b59f59201b236690e9a26e5bd7825ec5ca",
+            "copyright": "",
+            "correlation_anchors": [
+              "SPDXRef-Package-alpine"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "download_location": "",
+            "hashes": [],
+            "homepage": "",
+            "is_duplicate": false,
+            "licenses": [],
+            "name": "alpine",
+            "package_id": "",
+            "publisher": "",
+            "purl": "",
+            "spdx_id": "SPDXRef-Package-alpine",
+            "supplier_kind": "",
+            "supplier_name": "",
+            "type": "operating-system",
+            "version": "3.19"
+          }
+        },
+        {
+          "fact_kind": "sbom.component",
+          "stable_key": "fae8929e21375fea1e44d1b44be0fda6f05b27f4547cd3b2eebed52b4fb190cd",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872",
+          "payload": {
+            "component_id": "5b93eb6271b79ccfda52cc045a815190a490ca2a7cf50230e5aa196bff25e872",
+            "copyright": "",
+            "correlation_anchors": [
+              "SPDXRef-Image",
+              "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            ],
+            "cpe": "",
+            "description": "",
+            "document_id": "14417396b37b234fb5b9a094565f65285f66c2da6f03f4c60af69c739cc5092c",
+            "download_location": "",
+            "hashes": [
+              {
+                "algorithm": "SHA256",
+                "value": "1111111111111111111111111111111111111111111111111111111111111111"
+              }
+            ],
+            "homepage": "",
+            "is_duplicate": false,
+            "licenses": [],
+            "name": "registry.example.com/library/example",
+            "package_id": "",
+            "publisher": "",
+            "purl": "pkg:oci/example@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "spdx_id": "SPDXRef-Image",
+            "supplier_kind": "organization",
+            "supplier_name": "Example Inc.",
+            "type": "container",
+            "version": "1.2.3"
+          }
+        }
+      ]
+    },
+    {
+      "scope_id": "sbom-attestation://parity/slsa-attestation",
+      "generation_id": "sbom-attestation:parity-gen-8865-3",
+      "envelopes": [
+        {
+          "fact_kind": "attestation.signature_verification",
+          "stable_key": "3888c5f76f4ff200ce2aae63ca0ee6f234887492b2904c28832047634cc31fa1",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_attestation",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "payload": {
+            "statement_digest": "sha256:d60871f58d919374559e33286550dcbd252926e6b307e36499ca0d633a77af78",
+            "statement_id": "8f3fbca071a2c48a7a442fb1514f8da8edb64ad175ecd27fc57cbdc54c26cc17",
+            "verification_policy": "cosign-keyless",
+            "verification_result": "passed",
+            "verification_status": "passed",
+            "verification_subject": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        },
+        {
+          "fact_kind": "attestation.slsa_provenance",
+          "stable_key": "3dd8735354e04b4d399353b899ee67472763d3fca0534d53c639b2daac616f5a",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_attestation",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "payload": {
+            "builder_id": "https://github.com/actions/runner/v1",
+            "predicate_type": "https://slsa.dev/provenance/v1",
+            "statement_id": "8f3fbca071a2c48a7a442fb1514f8da8edb64ad175ecd27fc57cbdc54c26cc17"
+          }
+        },
+        {
+          "fact_kind": "attestation.statement",
+          "stable_key": "db73cd9d4dc9316e6889fb51921eb0920b76307918b1d0da854fbbe6b1a1fbce",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_attestation",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://registry.example.test",
+          "source_record_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "payload": {
+            "attestation_format": "in-toto",
+            "attestation_version": "https://in-toto.io/Statement/v1",
+            "parse_status": "parsed",
+            "payload_digest": "sha256:d60871f58d919374559e33286550dcbd252926e6b307e36499ca0d633a77af78",
+            "predicate_type": "https://slsa.dev/provenance/v1",
+            "source_format": "json",
+            "statement_digest": "sha256:d60871f58d919374559e33286550dcbd252926e6b307e36499ca0d633a77af78",
+            "statement_id": "8f3fbca071a2c48a7a442fb1514f8da8edb64ad175ecd27fc57cbdc54c26cc17",
+            "subject_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "subject_digests": [
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            ],
+            "verification_policy": "",
+            "verification_status": ""
+          }
+        }
+      ]
+    },
+    {
+      "scope_id": "sbom-attestation://parity/malformed",
+      "generation_id": "sbom-attestation:parity-gen-8865-4",
+      "envelopes": [
+        {
+          "fact_kind": "sbom.document",
+          "stable_key": "6ef7eeb6b6baaec457a65d43cc8d6ddbb6ab71cdfd00eaf2f12cc1b21e56231c",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/malformed.json",
+          "source_record_id": "https://sbom.example.test/private/malformed.json",
+          "payload": {
+            "component_count": 0,
+            "correlation_anchors": [
+              "sha256:cc67932f7b018f95f3dc1afa9ec364f546458af4110039d9c8f21f7b960f816a"
+            ],
+            "created_at": "",
+            "created_by_tool": "",
+            "dependency_count": 0,
+            "document_digest": "sha256:cc67932f7b018f95f3dc1afa9ec364f546458af4110039d9c8f21f7b960f816a",
+            "document_id": "9c967ecd6619855debbf44a0320a9275867c3f6c699652f744c9393ab0834ec9",
+            "document_name": "",
+            "format": "cyclonedx",
+            "parse_status": "malformed",
+            "serial_number": "",
+            "source_format": "json",
+            "spec_version": "",
+            "subject_digest": "",
+            "subject_digests": [],
+            "verification_policy": "",
+            "verification_status": "",
+            "warning_count": 1
+          }
+        },
+        {
+          "fact_kind": "sbom.warning",
+          "stable_key": "a4dcff98b01484d9b009dcd2ef9e72a3d2f92605f7a57f3006dbefff58d3d633",
+          "schema_version": "1.1.0",
+          "collector_kind": "sbom_document",
+          "fencing_token": 7,
+          "source_confidence": "reported",
+          "source_uri": "https://sbom.example.test/private/malformed.json",
+          "source_record_id": "9c967ecd6619855debbf44a0320a9275867c3f6c699652f744c9393ab0834ec9:document:malformed",
+          "payload": {
+            "document_id": "9c967ecd6619855debbf44a0320a9275867c3f6c699652f744c9393ab0834ec9",
+            "reason": "malformed_document",
+            "summary": "cyclonedx document could not be parsed: decode cyclonedx json: invalid character 'n' looking for beginning of object key string"
+          }
+        }
+      ]
+    }
+  ]
+}
