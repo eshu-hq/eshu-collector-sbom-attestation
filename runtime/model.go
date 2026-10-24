@@ -18,9 +18,9 @@ import (
 //
 //   - ScopeID, GenerationID, CollectorInstanceID, and CollectorKind compare
 //     against the same literals (was item.* on workflow.WorkItem).
-//   - FencingToken arrives on the SDK claim as a string and must parse to a
-//     positive int64, else collection fails closed (was
-//     item.CurrentFencingToken).
+//   - FencingToken arrives on the SDK claim as a string and must round-trip
+//     to int64: a present-but-unparseable token fails closed, never a
+//     silent zero (was item.CurrentFencingToken).
 //   - The claimed-status gate is dropped: a delivered SDK claim IS claimed
 //     work; status lives host-side now.
 //   - Generation metadata the SDK wire does not carry (pending status,
@@ -61,12 +61,14 @@ type GenerationInfo struct {
 }
 
 // CollectedSnapshot is one collected scope generation: the boundary identity
-// plus the emission envelopes in build order.
+// plus the emission envelopes in build order. There is deliberately no
+// partial flag: this collector has no coverage-warning-to-partial signal, so
+// a partial state would be dead surface (every committed snapshot converts to
+// a complete SDK Result).
 type CollectedSnapshot struct {
 	Scope      ScopeInfo
 	Generation GenerationInfo
 	Envelopes  []Envelope
-	Partial    bool
 }
 
 // Envelope is the runtime emission envelope. The document and attestation

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"maps"
+	"net/url"
 	"os"
 	"slices"
 	"strings"
@@ -86,6 +87,10 @@ func parity8865Plan(t *testing.T) []parity8865Case {
 				ArtifactKind:   ArtifactKindSBOM,
 				DocumentFormat: DocumentFormatCycloneDX,
 				DocumentURL:    "https://user:secret@sbom.example.test/private/demo-cyclonedx.json?token=secret#frag",
+				// Explicit record ID: the extracted producer refuses
+				// credential-bearing record IDs, so the parity plan carries
+				// its own (the URI still proves safeSourceURI redaction).
+				SourceRecordID: "parity-demo-cyclonedx",
 			},
 			generationID: "sbom-attestation:parity-gen-8865-1",
 			body:         readFixture(t, "../document/testdata/cyclonedx_image_subject.json"),
@@ -466,19 +471,19 @@ func TestSBOM8865ParityHostileInputsPin(t *testing.T) {
 		if envelope.CollectorKind != "sbom_document" {
 			t.Fatalf("document-path CollectorKind = %q, want sbom_document", envelope.CollectorKind)
 		}
-		// OPEN CUTOVER #4047: SourceRecordID is carried verbatim —
-		// source.go:141 builds it raw from DocumentURL while source.go:140
-		// redacts SourceURI via safeSourceURI. The sbom.document envelope
-		// proves the channel: its record ID is the raw credential-bearing
-		// URL. The extracted producer must redact-or-refuse
-		// credential-bearing record IDs; in-tree bytes stay frozen for
-		// cutover comparability. This pin fails if the channel changes
-		// shape or goes blank without updating the cutover item.
-		if envelope.FactKind == document.SBOMDocumentFactKind {
-			recordID := envelope.SourceRef.SourceRecordID
-			if !strings.Contains(recordID, "user:secret") || !strings.Contains(recordID, "token=") {
-				t.Fatalf("sbom.document SourceRecordID = %q, want verbatim credential-bearing carry-through until cutover closes it", recordID)
-			}
+		// CUTOVER #4047, closed at extraction: the in-tree channel carries
+		// the credential-bearing URL verbatim, but the extracted producer
+		// refuses credential-bearing record IDs at the source (see
+		// TestClaimedSourceRefusesCredentialBearingRecordID). No emitted
+		// record ID may be a credential-bearing URL: per-fact composite
+		// keys (digest:component:purl) are not URLs and skip the parse,
+		// while anything hierarchical must carry no userinfo.
+		recordID := envelope.SourceRef.SourceRecordID
+		if parsed, err := url.Parse(recordID); err == nil && parsed.Host != "" && parsed.User != nil {
+			t.Fatalf("SourceRecordID carries userinfo: %q", recordID)
+		}
+		if strings.Contains(recordID, "user:secret") || strings.Contains(recordID, "token=") {
+			t.Fatalf("SourceRecordID carries the hostile credential markers: %q", recordID)
 		}
 	}
 

@@ -257,6 +257,76 @@ func TestClaimedSourceRejectsWrongCollectorKind(t *testing.T) {
 	}
 }
 
+// TestClaimedSourceRefusesCredentialBearingRecordID proves the extraction
+// boundary closes the credential-record channel the in-tree parity pin holds
+// open: a record ID that carries userinfo fails closed instead of shipping
+// into envelopes. Operators carry credentials by env reference, never inline.
+func TestClaimedSourceRefusesCredentialBearingRecordID(t *testing.T) {
+	t.Parallel()
+
+	source, err := NewClaimedSource(SourceConfig{
+		CollectorInstanceID: "sbom-attestation-test",
+		Targets: []TargetConfig{{
+			ScopeID:        "sbom://configured/credential-record",
+			SourceType:     SourceTypeConfigured,
+			ArtifactKind:   ArtifactKindSBOM,
+			DocumentFormat: DocumentFormatCycloneDX,
+			DocumentURL:    "https://user:secret@sbom.example.com/private/sbom.json",
+		}},
+		Provider: &recordingProvider{doc: Document{Body: []byte(`{}`)}},
+		Now:      fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("NewClaimedSource() error = %v", err)
+	}
+
+	_, ok, err := source.NextClaimed(context.Background(), testClaim(
+		CollectorKind, "sbom-attestation-test", "sbom://configured/credential-record", "sbom-attestation:gen-1", 7,
+	))
+	if err == nil {
+		t.Fatal("NextClaimed() error = nil, want credential-record refusal")
+	}
+	if ok {
+		t.Fatal("NextClaimed() ok = true, want false")
+	}
+}
+
+// TestClaimedSourceRejectsOversizeDocument proves the advertised MaxBytes
+// bound is enforced at the provider choke point: a body larger than the
+// target bound fails closed with the same limit semantics as the live
+// transport's readBounded.
+func TestClaimedSourceRejectsOversizeDocument(t *testing.T) {
+	t.Parallel()
+
+	source, err := NewClaimedSource(SourceConfig{
+		CollectorInstanceID: "sbom-attestation-test",
+		Targets: []TargetConfig{{
+			ScopeID:        "sbom://configured/oversize",
+			SourceType:     SourceTypeConfigured,
+			ArtifactKind:   ArtifactKindSBOM,
+			DocumentFormat: DocumentFormatCycloneDX,
+			DocumentURL:    "https://sbom.example.com/big.json",
+			SourceRecordID: "oversize-record",
+			MaxBytes:       16,
+		}},
+		Provider: &recordingProvider{doc: Document{Body: []byte(`{"too":"big-for-sixteen-bytes"}`)}},
+		Now:      fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("NewClaimedSource() error = %v", err)
+	}
+
+	_, ok, err := source.NextClaimed(context.Background(), testClaim(
+		CollectorKind, "sbom-attestation-test", "sbom://configured/oversize", "sbom-attestation:gen-1", 7,
+	))
+	if err == nil {
+		t.Fatal("NextClaimed() error = nil, want max_bytes rejection")
+	}
+	if ok {
+		t.Fatal("NextClaimed() ok = true, want false")
+	}
+}
+
 type recordingProvider struct {
 	doc   Document
 	calls []TargetConfig

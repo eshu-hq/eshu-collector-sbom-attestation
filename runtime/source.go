@@ -137,6 +137,17 @@ func (s *ClaimedSource) NextClaimed(
 	if err != nil {
 		return CollectedSnapshot{}, false, fmt.Errorf("fetch SBOM attestation document: %w", err)
 	}
+	// The advertised MaxBytes bound is enforced here, at the only choke
+	// point every provider flows through; the live transport's readBounded
+	// stays core-side with the registry lane. Mirrors its limit semantics:
+	// non-positive falls back to the default, oversize fails closed.
+	maxBytes := target.MaxBytes
+	if maxBytes <= 0 {
+		maxBytes = defaultMaxDocumentBytes
+	}
+	if int64(len(fetched.Body)) > maxBytes {
+		return CollectedSnapshot{}, false, fmt.Errorf("SBOM attestation document exceeds max_bytes")
+	}
 	envs, observedAt, err := s.envelopes(item, target, fetched)
 	if err != nil {
 		return CollectedSnapshot{}, false, err
@@ -159,6 +170,14 @@ func (s *ClaimedSource) envelopes(
 	}
 	sourceURI := safeSourceURI(firstNonBlank(document.SourceURI, target.SourceURI, target.DocumentURL, target.Registry))
 	sourceRecordID := firstNonBlank(document.SourceRecordID, target.SourceRecordID, target.ReferrerDigest, target.DocumentURL, target.ScopeID)
+	// Extraction boundary (in-tree parity pin holds this channel open and
+	// names this refusal): a record ID that carries userinfo fails closed
+	// instead of shipping a credential into envelopes. In-tree bytes stay
+	// frozen for cutover comparability; the extracted producer refuses.
+	// Operators carry credentials by env reference, never inline.
+	if urlredact.CarriesUserinfo(sourceRecordID) {
+		return nil, time.Time{}, fmt.Errorf("SBOM attestation scope %q carries a credential-bearing record ID: configure an explicit source_record_id and carry credentials by env reference", target.ScopeID)
+	}
 	switch target.ArtifactKind {
 	case ArtifactKindSBOM:
 		envs, err := envelopes(item, target, document.Body, observedAt, sourceURI, sourceRecordID)
