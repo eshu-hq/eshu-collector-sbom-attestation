@@ -20,7 +20,14 @@ else
   digest="$(docker inspect --format='{{index .RepoDigests 0}}' "$ref" | sed 's/^.*@//')"
 fi
 case "$digest" in
-  sha256:????????????????????????????????????????????????????????????????) ;;
+  # Lowercase hex only, matching the seed stamp pattern: an uppercase digest
+  # that passes a looser check would be rejected downstream at seed time.
+  sha256:*)
+    case "${digest#sha256:}" in
+      *[!0-9a-f]* | "") echo "pin-digest: could not resolve a sha256 digest for $ref" >&2; exit 1 ;;
+    esac
+    if [ "${#digest}" -ne 71 ]; then echo "pin-digest: could not resolve a sha256 digest for $ref" >&2; exit 1; fi
+    ;;
   *) echo "pin-digest: could not resolve a sha256 digest for $ref" >&2; exit 1 ;;
 esac
 # Drop a digest or a tag, keeping a registry port ("host:5000/name:tag").

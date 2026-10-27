@@ -190,7 +190,11 @@ func configEnvRef(raw map[string]any, key string, getenv func(string) string) (s
 	if name == "" {
 		return "", nil
 	}
-	return getenv(name), nil
+	value := getenv(name)
+	if strings.TrimSpace(value) == "" {
+		return "", fmt.Errorf("%s names environment variable %q, which is unset or blank; refusing to downgrade to an anonymous fetch", key, name)
+	}
+	return value, nil
 }
 
 // hasInlineValue reports whether an inline credential key carries anything to

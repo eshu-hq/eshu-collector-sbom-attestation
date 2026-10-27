@@ -98,6 +98,25 @@ func TestParseSettingsResolvesCredentialEnvReferences(t *testing.T) {
 	}
 }
 
+func TestParseSettingsRefusesNamedButUnsetCredentialEnv(t *testing.T) {
+	t.Parallel()
+
+	// A typo'd or unset variable name must fail closed at config time: an
+	// empty resolution proceeding to an anonymous fetch would silently
+	// downgrade an authenticated source (Refs #8865, P1 fix-forward).
+	for _, key := range []string{"username_env", "password_env", "bearer_token_env"} {
+		targetMap := testTargetConfig()
+		targetMap[key] = "SBOM_DEFINITELY_UNSET_VAR"
+		_, err := ParseSettings(map[string]any{
+			"collector_instance_id": "sbom-attestation-test",
+			"targets":               []any{targetMap},
+		}, func(string) string { return "" })
+		if err == nil || !strings.Contains(err.Error(), "SBOM_DEFINITELY_UNSET_VAR") {
+			t.Fatalf("key %s: ParseSettings() error = %v, want fail-closed naming the unset variable", key, err)
+		}
+	}
+}
+
 func TestParseSettingsRejectsInlineCredentials(t *testing.T) {
 	t.Parallel()
 
