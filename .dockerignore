@@ -1,0 +1,5 @@
+# Keep VCS metadata and local tooling out of the docker build context.
+// The final image is unaffected (multi-stage copy), but a lean context
+// keeps builds fast and avoids shipping history to the daemon.
+.git
+.gitignore
