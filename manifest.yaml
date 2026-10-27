@@ -1,0 +1,72 @@
+apiVersion: eshu.dev/v1alpha1
+kind: ComponentPackage
+metadata:
+  id: dev.eshu.collector.sbom-attestation
+  name: SBOM attestation collector
+  publisher: eshu-hq
+  version: 0.1.0
+spec:
+  compatibleCore: ">=0.0.5 <0.2.0"
+  componentType: collector
+  collectorKinds:
+    - sbom_document
+    - sbom_attestation
+  runtime:
+    sdkProtocol: collector-sdk/v1alpha1
+    adapter: process
+  artifacts:
+    - platform: linux/amd64
+      image: ghcr.io/eshu-hq/eshu-collector-sbom-attestation@sha256:0000000000000000000000000000000000000000000000000000000000000000
+  emittedFacts:
+    - kind: sbom.document
+      payloadSchemaRef: sbom.document
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: sbom.component
+      payloadSchemaRef: sbom.component
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: sbom.dependency_relationship
+      payloadSchemaRef: sbom.dependency_relationship
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: sbom.external_reference
+      payloadSchemaRef: sbom.external_reference
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: attestation.statement
+      payloadSchemaRef: attestation.statement
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: attestation.slsa_provenance
+      payloadSchemaRef: attestation.slsa_provenance
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: attestation.signature_verification
+      payloadSchemaRef: attestation.signature_verification
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+    - kind: sbom.warning
+      payloadSchemaRef: sbom.warning
+      schemaVersions:
+        - 1.1.0
+      sourceConfidence:
+        - reported
+  telemetry:
+    # Declared only: the collector emits no metric under this prefix. See the
+    # README section "Operator signals".
+    metricsPrefix: eshu_dp_sbom_attestation_collector_

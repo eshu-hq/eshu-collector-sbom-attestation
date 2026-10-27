@@ -23,3 +23,17 @@ jobs:
       - name: forbid replace directives
         run: "! grep -E '^replace ' go.mod"
         shell: bash
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image without pushing it
+        run: docker build -t eshu-collector-sbom-attestation:ci .
+      - name: Seed contract
+        run: |
+          seed="$RUNNER_TEMP/seed"
+          mkdir -p "$seed" && chmod 777 "$seed"
+          docker run --rm --network none -v "$seed:/component" eshu-collector-sbom-attestation:ci seed --dest /component
+          test -x "$seed/collector"
+          test -s "$seed/manifest.yaml"
