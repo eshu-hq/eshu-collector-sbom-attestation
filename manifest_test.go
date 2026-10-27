@@ -173,9 +173,29 @@ func TestManifestDeclaresTheEightSBOMKinds(t *testing.T) {
 	if strings.Join(got, ",") != strings.Join(want, ",") {
 		t.Fatalf("manifest kinds %v, want %v", got, want)
 	}
-	wantKinds := []string{document.CollectorKind, runtime.CollectorKind}
-	if strings.Join(manifest.Spec.CollectorKinds, ",") != strings.Join(wantKinds, ",") {
-		t.Fatalf("collectorKinds = %v, want %v", manifest.Spec.CollectorKinds, wantKinds)
+	if len(manifest.Spec.CollectorKinds) != 1 || manifest.Spec.CollectorKinds[0] != runtime.CollectorKind {
+		t.Fatalf("collectorKinds = %v, want [%s]", manifest.Spec.CollectorKinds, runtime.CollectorKind)
+	}
+}
+
+// TestManifestDeclaresExactlyOneCollectorKind pins the host contract: a
+// satellite worker admits exactly one collector kind and fails closed
+// otherwise ("requires exactly one collector kind, got 2" CrashLoop on
+// ops-qa, eshu-hq/eshu#8865). The surviving kind is runtime.CollectorKind
+// (sbom_attestation), the activation scope kind the handler admits
+// (handler.go rejects foreign claim kinds, and the grants all scope
+// sbom_attestation). The sbom.* document fact kinds stay emittedFacts under
+// that scope: fact vocabulary is not scheduling identity, and the document
+// envelope keeps stamping document.CollectorKind on its own envelopes.
+func TestManifestDeclaresExactlyOneCollectorKind(t *testing.T) {
+	t.Parallel()
+
+	manifest := loadManifest(t)
+	if len(manifest.Spec.CollectorKinds) != 1 {
+		t.Fatalf("collectorKinds = %v, want exactly one kind (host admits one per satellite)", manifest.Spec.CollectorKinds)
+	}
+	if manifest.Spec.CollectorKinds[0] != runtime.CollectorKind {
+		t.Fatalf("collectorKinds = %v, want [%q] (the activation scope kind)", manifest.Spec.CollectorKinds, runtime.CollectorKind)
 	}
 }
 

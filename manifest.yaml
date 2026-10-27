@@ -8,8 +8,11 @@ metadata:
 spec:
   compatibleCore: ">=0.0.5 <0.2.0"
   componentType: collector
+  # Exactly one kind: the host admits one collector kind per satellite
+  # worker and fails closed otherwise. This is the activation scope kind
+  # (sbom_attestation); the sbom.* document facts remain emittedFacts under
+  # its grant scope.
   collectorKinds:
-    - sbom_document
     - sbom_attestation
   runtime:
     sdkProtocol: collector-sdk/v1alpha1
