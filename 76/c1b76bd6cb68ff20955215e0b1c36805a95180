@@ -1,0 +1,14 @@
+seed_race_test.go
+  h_78a442cba0b3e6 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76c1b76bd6cb68ff20955215e0b1c36805a95180",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
