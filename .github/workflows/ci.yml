@@ -235,7 +235,7 @@ jobs:
 
   image:
     needs: [changes]
-    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || needs.changes.outputs.image == 'true' || needs.changes.outputs.workflows == 'true'
+    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || needs.changes.outputs.image == 'true' || needs.changes.outputs.go == 'true' || needs.changes.outputs.misc == 'true' || needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -286,7 +286,7 @@ jobs:
     needs: [changes]
     # Go-class changes ride along: a toolchain or dependency bump can land
     # with Go sources, and scanning only go.mod/go.sum diffs would miss it.
-    if: github.event_name != 'pull_request' || needs.changes.outputs.go == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.workflows == 'true'
+    if: github.event_name != 'pull_request' || needs.changes.outputs.go == 'true' || needs.changes.outputs.deps == 'true' || needs.changes.outputs.misc == 'true' || needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -341,14 +341,15 @@ jobs:
           "$(go env GOPATH)/bin/gosec" -no-fail -fmt=sarif -out=gosec.sarif ./...
       - name: upload SARIF
         # Non-PR events only: fork PRs cannot write code-scanning results,
-        # and continue-on-error would turn a 403 into a silent green no-op.
+        # so they skip via the event gate below instead of failing on a
+        # 403. No continue-on-error: on push/schedule the token carries
+        # security-events:write, so a failure is real and fails loud.
         # The scan step above needs contents:read alone, so PR lanes still
         # run for forks on a read-only token.
         if: github.event_name != 'pull_request'
         uses: github/codeql-action/upload-sarif@8498dc4c2b27cdd99baf0f87955b29ebbf30c78d # v4.39.1
         with:
           sarif_file: gosec.sarif
-        continue-on-error: true
       - name: finding count (advisory on PR; red on scheduled findings)
         run: |
           n=$(jq '[.runs[].results[]] | length' gosec.sarif)

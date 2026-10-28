@@ -415,7 +415,7 @@ func TestFailClosedLanesRunOnMisc(t *testing.T) {
 	t.Parallel()
 
 	workflow := readCIWorkflow(t)
-	for _, name := range []string{"lint", "race", "boundary", "gosec"} {
+	for _, name := range []string{"lint", "test", "race", "boundary", "govulncheck", "gosec"} {
 		job, ok := workflow.Jobs[name]
 		if !ok {
 			t.Fatalf("ci.yml has no %q job", name)
