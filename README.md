@@ -58,3 +58,5 @@ build-provenance and SBOM attestations, and reports the digest in the job
 summary. Copy that digest into the activation's seed image reference
 (`collector seed --image-ref <repo>@sha256:<digest>`). See
 `scripts/pin-digest.sh` for resolving a pushed tag to its digest reference.
+
+<!-- skip-proof: docs-only lane selection probe, closed unmerged. -->
