@@ -15,3 +15,5 @@
 // snapshot with runtime.ToSDKResult. Document parsing stays in document/,
 // source redaction in urlredact/, and stable identity in packageidentity/.
 package collector
+
+// Probe: Go-only comment change to prove the image lane selects go-class PRs.
