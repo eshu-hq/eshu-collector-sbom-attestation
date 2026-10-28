@@ -16,7 +16,7 @@ import (
 func TestSDKPinsResolve(t *testing.T) {
 	t.Parallel()
 
-	var _ sdkcollector.ResultState = sdkcollector.ResultState("complete")
+	_ = sdkcollector.ResultState("complete")
 	for _, kind := range []string{
 		"sbom.document",
 		"sbom.component",

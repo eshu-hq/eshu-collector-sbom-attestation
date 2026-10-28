@@ -125,7 +125,10 @@ func seed(dest string, executable string, manifest []byte) (string, error) {
 	if dest == "" {
 		return "", errors.New("seed: --dest is required")
 	}
-	if err := os.MkdirAll(dest, 0o755); err != nil {
+	// dest must stay traversable across the init-container to runtime-UID
+	// handoff and holds only public artifacts (binary plus placeholder
+	// manifest).
+	if err := os.MkdirAll(dest, 0o755); err != nil { // #nosec G301 -- see above
 		return "", errors.New("seed: create destination directory")
 	}
 	digest, err := copyExecutable(executable, filepath.Join(dest, seededBinaryName))
