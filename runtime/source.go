@@ -223,10 +223,6 @@ func envelopes(
 	}
 }
 
-func partitionKey(target TargetConfig) string {
-	return fmt.Sprintf("%s:%s", target.SourceType, target.ArtifactKind)
-}
-
 func safeSourceURI(raw string) string {
 	trimmed := strings.TrimSpace(raw)
 	if trimmed == "" {

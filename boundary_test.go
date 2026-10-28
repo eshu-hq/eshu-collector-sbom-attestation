@@ -26,7 +26,15 @@ const coreModulePath = "github.com/eshu-hq/eshu/go"
 func TestImportBoundaryRejectsCoreAndCrossCollectorImports(t *testing.T) {
 	t.Parallel()
 
-	violations, err := importViolations(".", allowedImportPrefixes(modulePath(t)))
+	prefixes := allowedImportPrefixes(modulePath(t))
+	// coreModulePath documents the forbidden Eshu core prefix. Fail closed
+	// if the allowlist ever admits it: the violations scan below only
+	// reports imports outside the allowlist, so an admitted core prefix
+	// would pass silently.
+	if hasAllowedPrefix(coreModulePath, prefixes) {
+		t.Fatalf("allowlist admits the forbidden core module %q", coreModulePath)
+	}
+	violations, err := importViolations(".", prefixes)
 	if err != nil {
 		t.Fatalf("importViolations() error = %v", err)
 	}
