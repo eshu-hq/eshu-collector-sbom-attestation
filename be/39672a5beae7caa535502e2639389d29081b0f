@@ -1,0 +1,16 @@
+seed_floor_refs_a.go
+  h_78a442cba0b3e6 1-256
+seed_floor_refs_b.go
+  h_78a442cba0b3e6 1-256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "be39672a5beae7caa535502e2639389d29081b0f",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
