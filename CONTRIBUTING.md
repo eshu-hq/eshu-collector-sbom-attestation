@@ -45,9 +45,9 @@ pulled with `collector seed --image-ref`. The `image` lane fails loud
 on any manifest image that is neither the placeholder nor a real
 digest pin.
 
-Coverage stands at 71.0% of statements with `packageidentity` (301
-statements) still uncovered; the floor may only rise and the epic stays
-open until 90%. Weekly, `govulncheck` and `gosec` (SARIF to the Security
-tab, advisory until its false-positive rate is measured) run on a
-schedule and file an issue on findings. Dependabot proposes weekly
-grouped `gomod` and `github-actions` bumps.
+Coverage stands at 90.4% of statements (`COVERAGE_FLOOR`, ratcheted from
+the 68.9% epic baseline through 71.0%); the floor may only rise. Weekly,
+`govulncheck` and `gosec` (SARIF to the Security tab, advisory until its
+false-positive rate is measured) run on a schedule and file an issue on
+findings. Dependabot proposes weekly grouped `gomod` and
+`github-actions` bumps.
