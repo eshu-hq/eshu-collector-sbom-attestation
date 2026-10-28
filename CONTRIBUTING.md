@@ -25,17 +25,21 @@ actionlint lane.
 
 ## CI lanes
 
-`.github/workflows/ci.yml` runs a `changes` job first, so a PR only pays
-for lanes its paths can affect: Go sources run `lint`, `test`, `race`,
-`image`, `boundary`, `govulncheck`, and `gosec`; fixtures and embedded config
-(`testdata/**`, `**/*.json`, `manifest.yaml`) run `test` only; shell
-scripts run `shell` only (no test executes `scripts/pin-digest.sh`, so a
-shell-only change never pays for `test`); `Dockerfile`, `.dockerignore`,
-and `manifest.yaml` run `image`; dependency changes run `govulncheck`;
-workflow changes run `actionlint` plus the Go lanes. Anything
-unclassified runs the full Go lanes (fail closed). `ci-complete` is the
-only required check: it fails when a needed lane fails and passes when
-lanes were legitimately skipped (docs-only PRs).
+`.github/workflows/ci.yml` is a thin caller over the shared lane bodies in
+`eshu-hq/.github` (`go-collector-ci` v2, pinned by SHA): it runs a `changes`
+job first, so a PR only pays for lanes its paths can affect. Go sources run
+`lint`, `test`, `race`, `image`, `boundary`, `govulncheck`, and `gosec`;
+fixtures and embedded config (`testdata/**`, `**/*.json`, `manifest.yaml`)
+run `test` only; shell scripts run `shell` only (no test executes
+`scripts/pin-digest.sh`, so a shell-only change never pays for `test`);
+`Dockerfile`, `.dockerignore`, and `manifest.yaml` run `image`; dependency
+changes run `govulncheck`; workflow changes run `actionlint` plus the Go
+lanes. Anything unclassified runs the full Go lanes (fail closed). Check
+runs nest as `go-ci / <lane>`, so `go-ci / ci-complete` is the only
+required check: it fails when a needed lane fails and passes when lanes
+were legitimately skipped (docs-only PRs). The coverage artifact is named
+`coverage-sbom-attestation` (14-day retention) with per-package totals in
+the `race` job summary.
 
 The manifest keeps the all-zero placeholder digest permanently:
 `manifest.yaml` is `go:embed`'d into the binary, so a committed digest

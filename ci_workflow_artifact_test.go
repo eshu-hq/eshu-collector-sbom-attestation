@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 eshu-hq
 
-// Shape tests for the lanes that guard the shipped artifact and its
-// security reporting: the image lane must run on Go-source changes
-// (the Dockerfile builds the binary from the whole context), and the
-// gosec SARIF upload must stay non-PR-only without continue-on-error.
+// Shape tests for the caller-side artifact and security-reporting jobs:
+// the image lane must run on Go-source changes (the Dockerfile builds the
+// binary from the whole context), and the gosec SARIF upload must stay
+// non-PR-only without continue-on-error.
 // Shared workflow types and readers live in ci_workflow_test.go.
 package collector
 
@@ -16,15 +16,16 @@ import (
 
 // imageLaneClauseProblems returns every way cond breaks the image-lane
 // selection contract: the image embeds Go sources and the whole build
-// context, so the lane must run when the go or misc change class is true.
-// A bare substring check accepts an inverted comparison, which selects
-// the lane exactly when the class did not change and skips it when it did.
+// context, so the run-image wiring must fire when the go or misc change
+// class is true. A bare substring check accepts an inverted comparison,
+// which selects the lane exactly when the class did not change and skips
+// it when it did.
 func imageLaneClauseProblems(cond string) []string {
 	var problems []string
 	for _, class := range []string{"go", "misc"} {
 		want := "needs.changes.outputs." + class + " == 'true'"
 		if !strings.Contains(cond, want) {
-			problems = append(problems, "image if lacks \""+want+"\": Go sources and the whole context ship in the image")
+			problems = append(problems, "run-image lacks \""+want+"\": Go sources and the whole context ship in the image")
 		}
 		for _, inverted := range []string{
 			"needs.changes.outputs." + class + " != 'true'",
@@ -32,7 +33,7 @@ func imageLaneClauseProblems(cond string) []string {
 			"needs.changes.outputs." + class + " != 'false'",
 		} {
 			if strings.Contains(cond, inverted) {
-				problems = append(problems, "image if contains inverted clause "+inverted)
+				problems = append(problems, "run-image contains inverted clause "+inverted)
 			}
 		}
 	}
@@ -47,31 +48,40 @@ func imageLaneClauseProblems(cond string) []string {
 // Go lane yet break docker build, surfacing only as post-merge red main.
 // Unclassified files ride along too: the image embeds the whole build
 // context, so a misc-only change could still affect the build.
-// The live ci.yml text must pass; an inverted or removed go or misc
-// clause must fail (mirrors TestGosecUploadRunsOnNonPRWithoutContinueOnError).
+// The live ci.yml wiring must pass; an inverted or removed go or misc
+// clause must fail. The image-command must keep the seed contract and
+// the manifest digest checks the reusable cannot own.
 func TestImageLaneRunsOnGoSources(t *testing.T) {
 	t.Parallel()
 
 	workflow := readCIWorkflow(t)
-	job, ok := workflow.Jobs["image"]
+	call, ok := workflow.Jobs["go-ci"]
 	if !ok {
-		t.Fatal("ci.yml has no image job")
+		t.Fatal("ci.yml has no go-ci job")
 	}
-	if problems := imageLaneClauseProblems(job.If); len(problems) > 0 {
+	runImage, _ := call.With["run-image"].(string)
+	if problems := imageLaneClauseProblems(runImage); len(problems) > 0 {
 		t.Errorf("image lane breaks its selection contract:\n%s", strings.Join(problems, "\n"))
 	}
 
-	invertedGo := strings.Replace(job.If, "needs.changes.outputs.go == 'true'", "needs.changes.outputs.go != 'true'", 1)
+	invertedGo := strings.Replace(runImage, "needs.changes.outputs.go == 'true'", "needs.changes.outputs.go != 'true'", 1)
 	if len(imageLaneClauseProblems(invertedGo)) == 0 {
 		t.Errorf("inverted go clause: the gate accepted a lane that skips Go-source PRs")
 	}
-	invertedMisc := strings.Replace(job.If, "needs.changes.outputs.misc == 'true'", "needs.changes.outputs.misc != 'true'", 1)
+	invertedMisc := strings.Replace(runImage, "needs.changes.outputs.misc == 'true'", "needs.changes.outputs.misc != 'true'", 1)
 	if len(imageLaneClauseProblems(invertedMisc)) == 0 {
 		t.Errorf("inverted misc clause: the gate accepted a lane that skips misc-only PRs")
 	}
-	removedGo := strings.ReplaceAll(job.If, "needs.changes.outputs.go == 'true'", "")
+	removedGo := strings.ReplaceAll(runImage, "needs.changes.outputs.go == 'true'", "")
 	if len(imageLaneClauseProblems(removedGo)) == 0 {
 		t.Errorf("removed go clause: the gate accepted a lane with no go selection")
+	}
+
+	imageCommand, _ := call.With["image-command"].(string)
+	for _, want := range []string{"seed --dest", "manifest.yaml", "Dockerfile"} {
+		if !strings.Contains(imageCommand, want) {
+			t.Errorf("image-command lacks %q: the seed contract and digest pins must ride the reusable image lane", want)
+		}
 	}
 
 	// The go class must actually select .go sources and the module
@@ -113,30 +123,42 @@ func gosecUploadProblems(upload workflowStep) []string {
 }
 
 // TestGosecUploadRunsOnNonPRWithoutContinueOnError pins the SARIF upload
-// shape: the live ci.yml text must pass, and a silenced or ungated upload
-// mutant must fail (mirrors TestCICompleteAggregatesPerJobResults).
+// shape on the caller-side job: the live ci.yml text must pass, and a
+// silenced or ungated upload mutant must fail. The job rehydrates the
+// upstream gosec artifact, so the SARIF the tab shows is the scanned one.
 func TestGosecUploadRunsOnNonPRWithoutContinueOnError(t *testing.T) {
 	t.Parallel()
 
 	workflow := readCIWorkflow(t)
-	job, ok := workflow.Jobs["gosec"]
+	job, ok := workflow.Jobs["gosec-sarif"]
 	if !ok {
-		t.Fatal("ci.yml has no gosec job")
+		t.Fatal("ci.yml has no gosec-sarif job")
 	}
+	downloadIdx := stepIndex(job.Steps, func(s workflowStep) bool {
+		name, _ := s.With["name"].(string)
+		return strings.Contains(s.Uses, "download-artifact") && strings.Contains(name, "gosec-sbom-attestation")
+	})
 	uploadIdx := stepIndex(job.Steps, func(s workflowStep) bool { return strings.Contains(s.Uses, "upload-sarif") })
-	if uploadIdx < 0 {
-		t.Fatal("gosec job has no upload-sarif step")
+	if downloadIdx < 0 {
+		t.Error("gosec-sarif job rehydrates no gosec-sbom-attestation artifact")
 	}
-	if problems := gosecUploadProblems(job.Steps[uploadIdx]); len(problems) > 0 {
+	if uploadIdx < 0 {
+		t.Fatal("gosec-sarif job has no upload-sarif step")
+	}
+	// The non-PR gate lives on the job in the caller shape (fork PRs skip
+	// the whole job); merge it into the step view the contract checks.
+	upload := job.Steps[uploadIdx]
+	upload.If = job.If + " " + upload.If
+	if problems := gosecUploadProblems(upload); len(problems) > 0 {
 		t.Errorf("gosec SARIF upload breaks its contract:\n%s", strings.Join(problems, "\n"))
 	}
 
-	quiet := job.Steps[uploadIdx]
+	quiet := upload
 	quiet.ContinueOnError = true
 	if len(gosecUploadProblems(quiet)) == 0 {
 		t.Errorf("continue-on-error upload: the gate accepted a silenced failure")
 	}
-	ungated := job.Steps[uploadIdx]
+	ungated := upload
 	ungated.If = ""
 	if len(gosecUploadProblems(ungated)) == 0 {
 		t.Errorf("ungated upload: the gate accepted a step without the non-PR gate")
