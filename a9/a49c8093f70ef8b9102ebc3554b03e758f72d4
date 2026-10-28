@@ -1,0 +1,14 @@
+scripts/pin-digest.sh
+  h_78a442cba0b3e6 40-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a9a49c8093f70ef8b9102ebc3554b03e758f72d4",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
