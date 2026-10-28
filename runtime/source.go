@@ -245,6 +245,3 @@ func safeSourceURI(raw string) string {
 	parsed.Fragment = ""
 	return parsed.String()
 }
-
-// CI-SEED round R (RED proof, will revert): unused function trips lint.
-func ciSeedUnused() {}
