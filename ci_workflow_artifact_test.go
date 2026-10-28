@@ -14,6 +14,31 @@ import (
 	"testing"
 )
 
+// imageLaneClauseProblems returns every way cond breaks the image-lane
+// selection contract: the image embeds Go sources and the whole build
+// context, so the lane must run when the go or misc change class is true.
+// A bare substring check accepts an inverted comparison, which selects
+// the lane exactly when the class did not change and skips it when it did.
+func imageLaneClauseProblems(cond string) []string {
+	var problems []string
+	for _, class := range []string{"go", "misc"} {
+		want := "needs.changes.outputs." + class + " == 'true'"
+		if !strings.Contains(cond, want) {
+			problems = append(problems, "image if lacks \""+want+"\": Go sources and the whole context ship in the image")
+		}
+		for _, inverted := range []string{
+			"needs.changes.outputs." + class + " != 'true'",
+			"needs.changes.outputs." + class + " == 'false'",
+			"needs.changes.outputs." + class + " != 'false'",
+		} {
+			if strings.Contains(cond, inverted) {
+				problems = append(problems, "image if contains inverted clause "+inverted)
+			}
+		}
+	}
+	return problems
+}
+
 // TestImageLaneRunsOnGoSources keeps the shipped artifact validated on
 // PRs that change what it embeds: the Dockerfile COPYs go.mod/go.sum,
 // COPYs the whole context (which keeps .go sources), and go-builds the
@@ -22,6 +47,8 @@ import (
 // Go lane yet break docker build, surfacing only as post-merge red main.
 // Unclassified files ride along too: the image embeds the whole build
 // context, so a misc-only change could still affect the build.
+// The live ci.yml text must pass; an inverted or removed go or misc
+// clause must fail (mirrors TestGosecUploadRunsOnNonPRWithoutContinueOnError).
 func TestImageLaneRunsOnGoSources(t *testing.T) {
 	t.Parallel()
 
@@ -30,10 +57,21 @@ func TestImageLaneRunsOnGoSources(t *testing.T) {
 	if !ok {
 		t.Fatal("ci.yml has no image job")
 	}
-	for _, want := range []string{"needs.changes.outputs.go", "needs.changes.outputs.misc"} {
-		if !strings.Contains(job.If, want) {
-			t.Errorf("job image if = %q, want a %s clause: Go sources and the whole context ship in the image", job.If, want)
-		}
+	if problems := imageLaneClauseProblems(job.If); len(problems) > 0 {
+		t.Errorf("image lane breaks its selection contract:\n%s", strings.Join(problems, "\n"))
+	}
+
+	invertedGo := strings.Replace(job.If, "needs.changes.outputs.go == 'true'", "needs.changes.outputs.go != 'true'", 1)
+	if len(imageLaneClauseProblems(invertedGo)) == 0 {
+		t.Errorf("inverted go clause: the gate accepted a lane that skips Go-source PRs")
+	}
+	invertedMisc := strings.Replace(job.If, "needs.changes.outputs.misc == 'true'", "needs.changes.outputs.misc != 'true'", 1)
+	if len(imageLaneClauseProblems(invertedMisc)) == 0 {
+		t.Errorf("inverted misc clause: the gate accepted a lane that skips misc-only PRs")
+	}
+	removedGo := strings.ReplaceAll(job.If, "needs.changes.outputs.go == 'true'", "")
+	if len(imageLaneClauseProblems(removedGo)) == 0 {
+		t.Errorf("removed go clause: the gate accepted a lane with no go selection")
 	}
 
 	// The go class must actually select .go sources and the module
