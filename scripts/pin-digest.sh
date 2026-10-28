@@ -37,3 +37,5 @@ case "${repo##*/}" in
 esac
 echo "Use this reference for the deployment (collector seed --image-ref, or seed.image):"
 echo "  ${repo}@${digest}"
+
+# fork-proof: comment-only change to prove fork PR lanes run secrets-free.
