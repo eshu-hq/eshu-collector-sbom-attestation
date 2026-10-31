@@ -51,6 +51,15 @@ fact counts and latency, `failure` with class, HTTP status, and a bounded
 
 ## Releasing
 
+`.github/workflows/release.yml` runs on every push to `main` and on every
+pushed version tag. Nothing runs on a pull request, and the workflow deploys
+nothing.
+
+A push to `main` publishes the moving `main`, `latest`, and
+`sha-<full-sha>` tags with the same signature and attestation hardening as a
+version release. Use a moving tag only where floating is intended; releases
+stay pinned to digests.
+
 Tag `v<manifest version>` to publish the image. Use a `v<manifest
 version>-*` prerelease (for example `v0.1.0-qa.1`) for QA images: the release
 workflow publishes `ghcr.io/eshu-hq/eshu-collector-sbom-attestation` with
