@@ -60,8 +60,12 @@ A push to `main` publishes the moving `main`, `latest`, and
 version release. Use a moving tag only where floating is intended; releases
 stay pinned to digests.
 
-Tag `v<manifest version>` to publish the image. Use a `v<manifest
-version>-*` prerelease (for example `v0.1.0-qa.1`) for QA images: the release
+The release workflow refuses to publish a version release unless the tag
+points at the protected `main` head, so a `v*` tag cut from any other commit
+publishes nothing.
+
+Tag `v<manifest version>` on the `main` head to publish the image. Use a
+`v<manifest version>-*` prerelease (for example `v0.1.0-qa.1`) for QA images: the release
 workflow publishes `ghcr.io/eshu-hq/eshu-collector-sbom-attestation` with
 build-provenance and SBOM attestations, and reports the digest in the job
 summary. Copy that digest into the activation's seed image reference
