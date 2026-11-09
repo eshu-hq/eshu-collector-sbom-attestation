@@ -1,73 +1,64 @@
 # eshu-collector-sbom-attestation
 
-Eshu sbom attestation collector, extracted from the Eshu core repository.
+Status: pre-release. Please don't rely on it in production yet.
 
-**Pre-release. Holds no producer authority until its reviewed cutover
-(eshu-hq/eshu#8865).**
+Eshu keeps track of what your software is made of, and this little helper reads the paperwork. You point it at one SBOM or attestation document, it fetches and parses that document, and it hands Eshu a tidy, checked summary of what's inside. It only ever reads. Creating or signing documents isn't its job.
 
-Extraction tracking: [eshu-hq/eshu#8865](https://github.com/eshu-hq/eshu/issues/8865).
-The in-tree extraction census, producer-grant draft, and parity proofs live
-in the core repository until the cutover rehearsal lands them here.
+What you get:
 
-The collector runs through the Eshu component-extension host with the
-`process` runner. The host writes one bounded `collector-sdk/v1alpha1` request
-to stdin and reads one result from stdout. The collector gets no Postgres,
-graph, queue, lease, workflow, or telemetry handle, and it never imports
-`github.com/eshu-hq/eshu/go/internal/...` (`boundary_test.go` enforces this).
-The host builds the core fact envelope, validates the result, and owns claims
-and commits.
+- CycloneDX and SPDX SBOMs turned into parts, dependency links, and outside references
+- in-toto attestations, including SLSA build history and signature check results
+- Warnings as facts, so one messy corner of a document doesn't sink the whole read
+- Every fact labelled with where it came from, at confidence `reported`
+- No database access at all. Eshu's host checks and stores everything
 
-## What it collects
+```mermaid
+flowchart LR
+  A["Your SBOM or attestation URL"] --> B["This collector"] --> C["Eshu host"] --> D["Eshu core"]
+```
 
-For the SBOM or attestation target named by the claim it fetches, over
-bounded HTTPS, one explicitly configured document:
+Reach for it when the documents already exist at known web addresses and you want Eshu to read them on its own schedule. Skip it if you need to build an SBOM from scratch, sign something, or hunt for documents attached to container images.
 
-- CycloneDX or SPDX SBOM documents, parsed into the `sbom.*` kinds;
-- in-toto attestation statements (including SLSA provenance predicates and
-  signature verification results), parsed into the `attestation.*` kinds.
+## How Eshu runs it
 
-It emits the eight core `sbom.*`/`attestation.*` kinds at schema `1.1.0`, all
-reported confidence. Parser-level problems surface as in-band `sbom.warning`
-facts; only the reducer may promote a parsed document to verified truth.
-Credentials resolve only from the environment at startup into runtime-only
-target fields (HTTP `Authorization` header); they never reach facts, logs,
-metric labels, or docs. Inline credential keys in the activation config are
-rejected.
+The host starts the program for one claim at a time.
+It sends one bounded `collector-sdk/v1alpha1` request on stdin and reads one result from stdout.
+The collector fetches just the one document the claim names.
+Then the host validates the result and commits it, and the collector exits having stored nothing itself.
 
-Result states: `complete`; `retryable` for unconfigured scopes and transient
-or throttled provider failures; `terminal` for invalid config and
-non-retryable provider failures. Every emitted envelope carries provenance:
-source system, scope, generation, stable key, sanitized source URI, and
-source record ID. The standalone image serves `configured_source` targets
-only; `oci_referrer` discovery stays core-side and fails closed at admission.
+In other words, there's no long-running service to babysit here.
+You enable it, Eshu calls it claim by claim, and each call either
+comes back with checked facts or with a plain explanation of why not.
+If that loop is new to you, the concepts page in the table below
+walks through one claim from start to finish.
 
-## Operator signals
+## Documentation
 
-The collector declares the `eshu_dp_sbom_attestation_collector_` metric
-prefix but emits nothing under it. Each claim writes one JSON diagnostic line
-to stderr (kept only as a byte count by the process runner): `complete` with
-fact counts and latency, `failure` with class, HTTP status, and a bounded
-`result` such as `rate_limited`, plus `config_failure` and `unknown_scope`.
+Start at the [documentation index](docs/README.md) if you'd like a map, or jump straight to what you need:
 
-## Releasing
+| Guide | What you will find |
+| --- | --- |
+| [Getting started](docs/getting-started/README.md) | The fastest honest path from a fresh checkout to something working |
+| [Concepts](docs/concepts/README.md) | What it collects, how a claim plays out, and a worked example from the fixtures |
+| [Guides](docs/guides/README.md) | Seeding, operating, and troubleshooting, plus how releases work |
+| [Configuration reference](docs/reference/configuration.md) | Every config key, credentials, and the size limits |
+| [Fact kinds reference](docs/reference/facts.md) | Every fact kind it can return, mirroring the manifest |
+| [Architecture](docs/architecture/README.md) | Where it sits inside Eshu, what it's made of, and the versions it pins |
+| [Diagrams](docs/diagrams/README.md) | System context, claim lifecycle, and deployment, each with a text version |
+| [Examples](examples/README.md) | The real sample files in this repo and what each one is for |
 
-`.github/workflows/release.yml` runs on every push to `main` and on every
-pushed version tag. Nothing runs on a pull request, and the workflow deploys
-nothing.
+## Related projects
 
-A push to `main` publishes the moving `main`, `latest`, and
-`sha-<full-sha>` tags with the same signature and attestation hardening as a
-version release. Use a moving tag only where floating is intended; releases
-stay pinned to digests.
+- [Eshu core](https://github.com/eshu-hq/eshu) runs this collector and owns the final say on what's stored.
+- [eshu-sdk](https://github.com/eshu-hq/eshu-sdk) holds the shared collector and fact-schema modules.
+- [eshu-deploy](https://github.com/eshu-hq/eshu-deploy) has deployment examples you can copy from.
 
-The release workflow refuses to publish a version release unless the tag
-points at the protected `main` head, so a `v*` tag cut from any other commit
-publishes nothing.
+## Development
 
-Tag `v<manifest version>` on the `main` head to publish the image. Use a
-`v<manifest version>-*` prerelease (for example `v0.1.0-qa.1`) for QA images: the release
-workflow publishes `ghcr.io/eshu-hq/eshu-collector-sbom-attestation` with
-build-provenance and SBOM attestations, and reports the digest in the job
-summary. Copy that digest into the activation's seed image reference
-(`collector seed --image-ref <repo>@sha256:<digest>`). See
-`scripts/pin-digest.sh` for resolving a pushed tag to its digest reference.
+Run `make ci` and you're running the same lint, test, and race checks that CI runs.
+The [contributing guide](docs/contributing/README.md) covers setup in a bit more detail,
+including the tools you'll want installed first.
+
+## Contributing, security, and license
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first, and keep credentials as environment references, never inline values. If you spot a security issue, please don't file it as a public issue. Reach the maintainers privately so a fix can land before details circulate. This project is MIT licensed. See [LICENSE](LICENSE).
